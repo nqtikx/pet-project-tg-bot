@@ -9,7 +9,7 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - prodaction_postgres_data:/var/lib/postgresql/data
+      - prodaction_postgres_data:/var/lib/postgresql
 
 volumes:
   prodaction_postgres_data:
