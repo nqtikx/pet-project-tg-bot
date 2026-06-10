@@ -11,11 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "reminders")
 public class Reminder {
@@ -48,4 +45,78 @@ public class Reminder {
 
   @Column(name = "sent_at")
   private LocalDateTime sentAt;
+
+  public Reminder() {}
+
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public TelegramUser getTelegramUser() {
+    return telegramUser;
+  }
+
+  public void setTelegramUser(TelegramUser telegramUser) {
+    this.telegramUser = telegramUser;
+  }
+
+  public Long getChatId() {
+    return chatId;
+  }
+
+  public void setChatId(Long chatId) {
+    this.chatId = chatId;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  public LocalDateTime getRemindAt() {
+    return remindAt;
+  }
+
+  public void setRemindAt(LocalDateTime remindAt) {
+    this.remindAt = remindAt;
+  }
+
+  public ReminderStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(ReminderStatus status) {
+    this.status = status;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(LocalDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  public LocalDateTime getSentAt() {
+    return sentAt;
+  }
+
+  public void setSentAt(LocalDateTime sentAt) {
+    this.sentAt = sentAt;
+  }
 }
