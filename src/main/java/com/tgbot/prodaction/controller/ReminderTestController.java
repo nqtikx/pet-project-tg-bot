@@ -1,9 +1,12 @@
 package com.tgbot.prodaction.controller;
 
 import com.tgbot.prodaction.dto.CreateReminderRequest;
+import com.tgbot.prodaction.dto.ParseRemindRequest;
+import com.tgbot.prodaction.dto.ParsedReminderCommand;
 import com.tgbot.prodaction.dto.ReminderResponse;
 import com.tgbot.prodaction.model.Reminder;
 import com.tgbot.prodaction.model.TelegramUser;
+import com.tgbot.prodaction.service.ReminderParserService;
 import com.tgbot.prodaction.service.ReminderService;
 import com.tgbot.prodaction.service.TelegramUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReminderTestController {
   private final TelegramUserService telegramUserService;
   private final ReminderService reminderService;
+  private final ReminderParserService reminderParserService;
 
   @Autowired
   public ReminderTestController(TelegramUserService telegramUserService,
-      ReminderService reminderService) {
+      ReminderService reminderService, ReminderParserService reminderParserService) {
     this.telegramUserService = telegramUserService;
     this.reminderService = reminderService;
+    this.reminderParserService = reminderParserService;
   }
 
   @PostMapping("/test/reminders")
@@ -34,6 +39,11 @@ public class ReminderTestController {
         request.getText(), request.getRemindAt());
 
     return toReminderResponse(remind);
+  }
+
+  @PostMapping("/test/parse-reminder")
+  public ParsedReminderCommand parseRemind(@RequestBody ParseRemindRequest request) {
+    return reminderParserService.parseReminderCommand(request.getMessageText());
   }
 
   private ReminderResponse toReminderResponse(Reminder remind) {

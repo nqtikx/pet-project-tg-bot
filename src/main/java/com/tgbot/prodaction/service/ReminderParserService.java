@@ -25,7 +25,7 @@ public class ReminderParserService {
       throw new IllegalArgumentException("Invalid reminder command");
     }
 
-    String dateTimeText = textArr[1] + " " + textArr[2];
+    String dateTimeText = textArr[2] + " " + textArr[1];
     LocalDateTime remindAt = parseRemindAt(dateTimeText);
 
     String text = String.join(" ", Arrays.copyOfRange(textArr, 3, textArr.length));
