@@ -1,5 +1,6 @@
 package com.tgbot.prodaction.controller;
 
+import com.tgbot.prodaction.dto.CreateReminderFromCommandRequest;
 import com.tgbot.prodaction.dto.CreateReminderRequest;
 import com.tgbot.prodaction.dto.ParseRemindRequest;
 import com.tgbot.prodaction.dto.ParsedReminderCommand;
@@ -44,6 +45,17 @@ public class ReminderTestController {
   @PostMapping("/test/parse-reminder")
   public ParsedReminderCommand parseRemind(@RequestBody ParseRemindRequest request) {
     return reminderParserService.parseReminderCommand(request.getMessageText());
+  }
+
+  @PostMapping("/test/reminders/from-command")
+  public ReminderResponse createReminderFromCommand(@RequestBody CreateReminderFromCommandRequest request) {
+    ParsedReminderCommand parsedReminderCommand = reminderParserService.parseReminderCommand(request.getMessageText());
+    TelegramUser tgUser = telegramUserService.findOrCreateUser(request.getTelegramUserId(),
+        request.getChatId(), request.getUsername(), request.getFirstName(),
+        request.getLastName());
+    Reminder remind = reminderService.createReminder(tgUser, request.getChatId(),
+        parsedReminderCommand.getText(), parsedReminderCommand.getRemindAt());
+    return toReminderResponse(remind);
   }
 
   private ReminderResponse toReminderResponse(Reminder remind) {
