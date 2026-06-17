@@ -64,6 +64,7 @@ public class TelegramReminderBot implements SpringLongPollingBot,
 
     if (START_COMMAND.equals(messageText)) {
       handleStartCommand(update);
+      log.info("Message has been send to the user with username: {}", update.getMessage().getFrom().getUserName());
       return;
     }
     sendMessage(chatId, UNKNOWN_START_COMMAND);
