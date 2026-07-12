@@ -24,10 +24,16 @@ public class ReminderDispatchService {
     List<Reminder> reminders = reminderService.findDueReminders(localDateNow);
 
     for (Reminder el : reminders) {
+      if (reminderService.isStale(el, localDateNow)) {
+        reminderService.markAsFailed(el);
+        log.warn("Stale reminder {}, remind_at={}, marked as FAILED", el.getId(), el.getRemindAt());
+        continue;
+      }
+
       reminderService.markAsProcessing(el);
       log.info("Reminder {} mark as PROCESSING", el.getId());
       if (tgReminderBot.sendMessage(el.getChatId(), "Напоминание: " + el.getText())) {
-        log.info("Reminder has been send  with id: {}", el.getId());
+        log.info("Reminder has been sent  with id: {}", el.getId());
         reminderService.markAsSent(el);
         log.info("Reminder {} mark as SENT", el.getId());
       } else {

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReminderService {
   private final ReminderRepository reminderRepository;
+  private static final long STALE_AFTER_HOURS = 1;
 
   @Autowired
   public ReminderService(ReminderRepository reminderRepository) {
@@ -77,5 +78,10 @@ public class ReminderService {
     reminder.setStatus(ReminderStatus.FAILED);
     reminder.setUpdatedAt(LocalDateTime.now());
     reminderRepository.save(reminder);
+  }
+
+  public boolean isStale(Reminder reminder, LocalDateTime localDateNow) {
+    LocalDateTime staleThreshold = localDateNow.minusHours(STALE_AFTER_HOURS);
+    return reminder.getRemindAt().isBefore(staleThreshold);
   }
 }
