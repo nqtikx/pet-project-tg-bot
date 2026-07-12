@@ -5,6 +5,7 @@ import com.tgbot.prodaction.model.ReminderStatus;
 import com.tgbot.prodaction.model.TelegramUser;
 import com.tgbot.prodaction.repository.ReminderRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,28 @@ public class ReminderService {
     reminder.setUpdatedAt(now);
 
     return reminderRepository.save(reminder);
+  }
+
+  public List<Reminder> findDueReminders(LocalDateTime now) {
+    return reminderRepository.findByStatusAndRemindAtLessThanEqualOrderByRemindAtAsc(ReminderStatus.ACTIVE, now);
+  }
+
+  public void markAsProcessing(Reminder reminder) {
+    reminder.setStatus(ReminderStatus.PROCESSING);
+    reminder.setUpdatedAt(LocalDateTime.now());
+    reminderRepository.save(reminder);
+  }
+
+  public void markAsSent(Reminder reminder) {
+    reminder.setStatus(ReminderStatus.SENT);
+    reminder.setUpdatedAt(LocalDateTime.now());
+    reminder.setSentAt(LocalDateTime.now());
+    reminderRepository.save(reminder);
+  }
+
+  public void markAsFailed(Reminder reminder) {
+    reminder.setStatus(ReminderStatus.FAILED);
+    reminder.setUpdatedAt(LocalDateTime.now());
+    reminderRepository.save(reminder);
   }
 }

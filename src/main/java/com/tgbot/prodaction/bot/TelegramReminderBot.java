@@ -98,7 +98,7 @@ public class TelegramReminderBot implements SpringLongPollingBot,
       }
       return;
     }
-
+    log.info("Неправильное сообщение от пользователя: {}", messageText);
     sendMessage(chatId, UNKNOWN_COMMAND_MESSAGE);
   }
 
@@ -118,6 +118,7 @@ public class TelegramReminderBot implements SpringLongPollingBot,
 
     reminderService.createReminder(tgUser, chatId, remind.getText(), remind.getRemindAt());
 
+    log.info("Remind message is creating");
     sendMessage(chatId, REMIND_MESSAGE);
   }
 
@@ -130,7 +131,7 @@ public class TelegramReminderBot implements SpringLongPollingBot,
     sendMessage(chatId, START_MESSAGE);
   }
 
-  public void sendMessage(Long chatId, String text) {
+  public boolean sendMessage(Long chatId, String text) {
     SendMessage message = SendMessage
         .builder()
         .chatId(chatId)
@@ -139,8 +140,10 @@ public class TelegramReminderBot implements SpringLongPollingBot,
 
     try {
       tgClient.execute(message);
+      return true;
     } catch (TelegramApiException e) {
       log.error("Failed to send message to chat id: {}", chatId, e);
+      return false;
     }
   }
 

@@ -1,0 +1,1 @@
+ALTER TABLE reminders DROP CONSTRAINT reminders_chat_id_key;
